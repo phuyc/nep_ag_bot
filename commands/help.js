@@ -7,8 +7,8 @@ const help = new EmbedBuilder()
 .setDescription('/help')
 .setThumbnail('https://img-10.stickers.cloud/packs/977bc206-85d3-4882-bd71-a8ab12956a4e/webp/c8bf8419-c2e4-4810-ab71-862dfb67614e.webp')
 .addFields(
-    { name: '/character', value: 'Looks up a character\'s profile. The returned embeds can be used within 30 minutes.\n**Example: /character 04**' },
-    { name: '/list', value: 'Displays lists of characters.'},
+    { name: '/artery', value: 'Looks up a mech girl\'s profile. The returned embeds can be used within 30 minutes.\n**Example: /artery 04**' },
+    { name: '/list', value: 'Displays a list of characters.'},
     { name: '/ping', value: 'Return latency.' },
     { name: '/help', value: 'Displays this message' },
     { name: '/info', value: 'Displays bot info.' }

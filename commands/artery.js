@@ -28,8 +28,8 @@ let actionRow = new ActionRowBuilder()
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('character')
-        .setDescription('Displays the information of a character')
+        .setName('artery')
+        .setDescription('Displays the information of a mech girl')
         .addStringOption(option => 
             option.setName('name')
                 .setDescription('name of the character')

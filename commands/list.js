@@ -4,12 +4,20 @@ const { randomColor } = require("../functions/randomColor");
 const db = Database("./ag.db");
 
 function createList(rarity) {
-    let characters = db.prepare(`SELECT name FROM characters WHERE rarity=? ORDER BY rarity, name;`);
+    let fields = [];
+    let characters = db.prepare(`SELECT name FROM characters WHERE rarity=? ORDER BY name;`);
     let field = '';
     for (let character of characters.iterate(rarity)) {
-        field += character.name + ', ';
+        if (field.length <= 1024) { 
+            field += character.name + ', ';
+        } else {
+            fields.push(field.slice(0, -2));
+            field = character.name;
+        }
     }
-    return field.slice(0, -2);
+    fields.push(field.slice(0, -2))
+
+    return fields;
 }
 
 module.exports = {
@@ -28,12 +36,21 @@ module.exports = {
         
 
         // Create field for each rarity
-        let rarities = db.prepare(`SELECT DISTINCT rarity FROM characters ORDER BY rarity;`);
+        let rarities = db.prepare(`SELECT DISTINCT rarity FROM characters ORDER BY CASE rarity WHEN 'Rare' THEN 0 WHEN 'Epic' THEN 1 WHEN 'Legend' THEN 2 END;`);
         for (let rarity of rarities.iterate()) {
-            let field = createList(rarity.rarity);
-            list.addFields({ name: `[${rarity.rarity}]`, value: field });
+            let fields = createList(rarity.rarity);
+            for (let field of fields) {
+                if (fields.indexOf(field) == 0) list.addFields({ name: `[${RARITIES[rarity.rarity]}]`, value: field });
+                else list.addFields({ name: `~~~~~~`, value: field });
+            }
         }
 
         interaction.reply({ embeds: [list] });
     }
+}
+
+const RARITIES = {
+    'Rare': '★★★',
+    'Epic': '★★★★',
+    'Legend': '★★★★★'
 }

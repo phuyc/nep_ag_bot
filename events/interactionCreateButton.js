@@ -1,5 +1,5 @@
 const { Events } = require("discord.js");
-const { embeds } = require("../commands/character");
+const { embeds } = require("../commands/artery");
 const Mutex = require('async-mutex').Mutex;
 
 // Mutex
@@ -10,7 +10,10 @@ module.exports = {
     async execute(interaction) {
         if (!interaction.isButton()) return;
         if (!['skills', 'imprints', 'uniqueEquipment', 'design'].includes(interaction.customId)) return;
-
+        if (!interaction.guild.members.me.permissionsIn(interaction.channel).has([PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.UseExternalEmojis])) {
+            await interaction.reply("nep does not have permission to send messages here.");
+            return;
+        }
         await mutex.runExclusive(async () => {
             let profile = embeds[interaction.message.id];
             // if embeds have expired

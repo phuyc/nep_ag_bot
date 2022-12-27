@@ -55,16 +55,20 @@ async function createCharacterEmbed(name) {
 
     // Create imprints embed
     let imprints = json.imprints;
-    let selfBuff = Object.keys(imprints).filter((key) => /rank.Self/.test(key));
-    let partyBuff = Object.keys(imprints).filter((key) => /rank.Party/.test(key));
     let value = '';
-    
-    for (let i = 0; i < selfBuff.length; i++) {
-        value += `**Rank ${i + 1}**: ${ATTRIBUTES[imprints.selfStat] ?? imprints.selfStat} +${imprints[selfBuff[i]]}`;
-        if (imprints[partyBuff[i]]) {
-            value += ` and ${ATTRIBUTES[imprints.partyStat] ?? imprints.partyStat} +${imprints[partyBuff[i]]} (Party, excluding self)`;
+    if (!imprints) {
+        value = '**The imprints are not available for this character yet**\nWe will add them soon as it is possible!';
+    } else {
+        let selfBuff = Object.keys(imprints).filter((key) => /rank.Self/.test(key));
+        let partyBuff = Object.keys(imprints).filter((key) => /rank.Party/.test(key));
+        
+        for (let i = 0; i < selfBuff.length; i++) {
+            value += `**Rank ${i + 1}**: ${ATTRIBUTES[imprints.selfStat] ?? imprints.selfStat} +${imprints[selfBuff[i]]}`;
+            if (imprints[partyBuff[i]]) {
+                value += ` and ${ATTRIBUTES[imprints.partyStat] ?? imprints.partyStat} +${imprints[partyBuff[i]]} (Party, excluding self)`;
+            }
+            value += '\n';
         }
-        value += '\n'
     }
 
     // * Imprints
